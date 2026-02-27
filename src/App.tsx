@@ -1,13 +1,12 @@
 // page
-import HomePage from "./pages/HomePage"
+import HomePage from "./pages/HomePage";
 
 function App() {
-  
   return (
-    <>
+    <div className="min-h-screen">
       <HomePage />
-    </>
-  )
+    </div>
+  );
 }
 
-export default App
+export default App;
