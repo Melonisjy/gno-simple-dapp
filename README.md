@@ -1,73 +1,27 @@
-# React + TypeScript + Vite
+# Gno.land Simple Dapp (Adena Wallet)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Tech Stacks
 
-Currently, two official plugins are available:
+- React (required)
+- Typescript (required)
+- Vite
+- Zustand
+- Tailwind CSS
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Why these stacks?
 
-## React Compiler
+### Tailwind CSS (vs styled-components)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+1. 제한된 시간 안에 빠르게 UI 구현 가능
+2. 스타일을 컴포넌트 로직에서 분리해 마크업 레벨에서 명확하게 표현 가능
 
-## Expanding the ESLint configuration
+### Zustand (vs Jotai)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+1. atom 단위 설계보다 wallet, toast 같은 도메인 중심 상태를 한눈에 관리하기 쉬움
+2. 과제 범위에서 구조를 단순하게 유지하기 유리함
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### Vite
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+1. React 생태계에서 CRA보다 선호도가 높음
+2. ESBuild 기반으로 dev server/HMR이 빨라 개발 생산성이 높음
+3. CRA 대비 불필요한 추상화가 적어 구조 파악이 쉬움
