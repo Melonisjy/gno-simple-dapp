@@ -4,22 +4,26 @@ import { useState } from "react";
 // components
 import Button from "../components/Button";
 import Card from "../components/Card";
+import Input from "../components/Input";
 
 // store
 import { useWalletStore } from "../store/walletStore";
 
 const STAGING_CHAIN_ID = "staging";
+
+type AccountData = {
+  address: string;
+  coins: string;
+  chainId: string;
+};
+
 type AdenaProvider = {
   AddEstablish: (appName: string) => Promise<unknown>;
   SwitchNetwork: (chainId: string) => Promise<unknown>;
   GetAccount: () => Promise<{
     code: number;
     status: string;
-    data: {
-      address: string;
-      coins: string;
-      chainId: string;
-    };
+    data: AccountData;
   }>;
 };
 
@@ -97,14 +101,8 @@ export default function HomePage() {
           <p>Balance: {isBalanceVisible ? balanceUgnot || "0ugnot" : ""}</p>
         </Card>
         <Card title="Send GNOT">
-          <label className="block">
-            <span className="mb-1 block">Recipient:</span>
-            <input className="h-10 w-full rounded-md border border-gray-400 px-3 text-[12px]" />
-          </label>
-          <label className="block">
-            <span className="mb-1 block">Amount:</span>
-            <input className="h-10 w-full rounded-md border border-gray-400 px-3 text-[12px]" />
-          </label>
+          <Input label="Recipient:" placeholder="g1..." />
+          <Input label="Amount:" placeholder="1000000ugnot" />
           <Button enabled={isReady} label="Send" />
         </Card>
       </div>
