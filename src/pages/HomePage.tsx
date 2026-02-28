@@ -27,18 +27,15 @@ type AdenaProvider = {
     data: AccountData;
   }>;
   DoContract: (payload: {
-    tx: {
-      messages: Array<{
-        type: string;
-        value: {
-          from_address: string;
-          to_address: string;
-          amount: string;
-        };
-      }>;
-      memo?: string;
-    };
-    isNotification: boolean;
+    messages: Array<{
+      type: string;
+      value: {
+        from_address: string;
+        to_address: string;
+        amount: string;
+      };
+    }>;
+    memo?: string;
   }) => Promise<{
     status?: "success" | "failure";
     data?: { hash?: string };
@@ -100,20 +97,17 @@ export default function HomePage() {
 
     try {
       const tx = await window.adena.DoContract({
-        tx: {
-          messages: [
-            {
-              type: "/bank.MsgSend",
-              value: {
-                from_address: address,
-                to_address: recipient,
-                amount: amount,
-              },
+        messages: [
+          {
+            type: "/bank.MsgSend",
+            value: {
+              from_address: address,
+              to_address: recipient.trim(),
+              amount: amount.trim(),
             },
-          ],
-          memo: "Send GNOT for assignment",
-        },
-        isNotification: true,
+          },
+        ],
+        memo: "Send GNOT for assignment",
       });
 
       addToast({
