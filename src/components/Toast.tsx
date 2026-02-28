@@ -1,8 +1,19 @@
+// react
+import { useEffect } from "react";
+
 // store
 import { useToastStore } from "../store/toastStore";
 
 export default function Toast() {
-  const { toasts } = useToastStore();
+  const { toasts, removeToast } = useToastStore();
+
+  useEffect(() => {
+    const timers = toasts.map((toast) =>
+      setTimeout(() => removeToast(toast.id), 3000),
+    );
+
+    return () => timers.forEach(clearTimeout);
+  }, [toasts, removeToast]);
 
   return (
     <div className="fixed top-4 right-4 z-50 flex w-[360px] flex-col gap-2">
