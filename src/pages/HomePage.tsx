@@ -1,3 +1,6 @@
+// react
+import { useState } from "react";
+
 // components
 import Button from "../components/Button";
 import Card from "../components/Card";
@@ -5,7 +8,7 @@ import Card from "../components/Card";
 // store
 import { useWalletStore } from "../store/walletStore";
 
-const PORTAL_LOOP_CHAIN_ID = "portal-loop";
+const STAGING_CHAIN_ID = "staging";
 type AdenaProvider = {
   AddEstablish: (appName: string) => Promise<unknown>;
   SwitchNetwork: (chainId: string) => Promise<unknown>;
@@ -27,10 +30,21 @@ declare global {
 }
 
 export default function HomePage() {
-  const { isConnected, chainId, setAccount } = useWalletStore();
-  const isReady = isConnected && chainId === PORTAL_LOOP_CHAIN_ID;
+  const {
+    isConnected,
+    chainId,
+    address,
+    balanceUgnot,
+    setAccount,
+    setBalance,
+  } = useWalletStore();
 
-  const connectWallet = async () => {
+  const isReady = isConnected && chainId === STAGING_CHAIN_ID;
+
+  const [isAddressVisible, setIsAddressVisible] = useState<boolean>(false);
+  const [isBalanceVisible, setIsBalanceVisible] = useState<boolean>(false);
+
+  const onConnect = async () => {
     if (!window.adena) {
       window.open("https://adena.app/", "_blank");
       return;
@@ -38,18 +52,19 @@ export default function HomePage() {
 
     try {
       await window.adena.AddEstablish("Adena");
-
       let account = await window.adena.GetAccount();
       if (!account.data.address) throw new Error("No address");
 
-      if (account.data.chainId !== PORTAL_LOOP_CHAIN_ID) {
-        await window.adena.SwitchNetwork(PORTAL_LOOP_CHAIN_ID);
+      if (account.data.chainId !== STAGING_CHAIN_ID) {
+        await window.adena.SwitchNetwork(STAGING_CHAIN_ID);
+
         account = await window.adena.GetAccount();
       }
       setAccount({
         address: account.data.address,
         chainId: account.data.chainId,
       });
+      setBalance(account.data.coins);
     } catch (err) {
       console.error("wallet connection failed", err);
     }
@@ -63,15 +78,23 @@ export default function HomePage() {
 
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         <Card title="Connect Adena Wallet">
-          <Button enabled={!isReady} onClick={connectWallet} label="Connect" />
+          <Button enabled={!isReady} onClick={onConnect} label="Connect" />
         </Card>
         <Card title="Get Gno.land Address">
-          <Button enabled={isReady} label="Get Address" />
-          <p>Address:</p>
+          <Button
+            enabled={isReady}
+            onClick={() => setIsAddressVisible(true)}
+            label="Get Address"
+          />
+          <p>Address: {isAddressVisible ? address : ""}</p>
         </Card>
         <Card title="Get Balance">
-          <Button enabled={isReady} label="Get Balance" />
-          <p>Balance:</p>
+          <Button
+            enabled={isReady}
+            onClick={() => setIsBalanceVisible(true)}
+            label="Get Balance"
+          />
+          <p>Balance: {isBalanceVisible ? balanceUgnot || "0ugnot" : ""}</p>
         </Card>
         <Card title="Send GNOT">
           <label className="block">
