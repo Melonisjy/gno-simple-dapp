@@ -122,13 +122,13 @@ export default function HomePage() {
           tx.status === "success"
             ? "Transaction Success"
             : "Transaction Failed",
-        txHash: tx.data?.hash ?? "",
+        txHash: tx.data?.hash ?? "-",
       });
     } catch {
       addToast({
         id: crypto.randomUUID(),
         status: "Transaction Failed",
-        txHash: "",
+        txHash: "-",
       });
     }
   };
