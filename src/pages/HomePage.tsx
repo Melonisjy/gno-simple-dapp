@@ -8,6 +8,7 @@ import Input from "../components/Input";
 
 // store
 import { useWalletStore } from "../store/walletStore";
+import { useToastStore } from "../store/toastStore";
 
 const STAGING_CHAIN_ID = "staging";
 
@@ -25,6 +26,23 @@ type AdenaProvider = {
     status: string;
     data: AccountData;
   }>;
+  DoContract: (payload: {
+    tx: {
+      messages: Array<{
+        type: string;
+        value: {
+          from_address: string;
+          to_address: string;
+          amount: string;
+        };
+      }>;
+      memo?: string;
+    };
+    isNotification: boolean;
+  }) => Promise<{
+    status?: "success" | "failure";
+    data?: { hash?: string };
+  }>;
 };
 
 declare global {
@@ -34,6 +52,7 @@ declare global {
 }
 
 export default function HomePage() {
+  const { addToast } = useToastStore();
   const {
     isConnected,
     chainId,
@@ -47,6 +66,8 @@ export default function HomePage() {
 
   const [isAddressVisible, setIsAddressVisible] = useState<boolean>(false);
   const [isBalanceVisible, setIsBalanceVisible] = useState<boolean>(false);
+  const [recipient, setRecipient] = useState<string>("");
+  const [amount, setAmount] = useState<string>("");
 
   const onConnect = async () => {
     if (!window.adena) {
@@ -71,6 +92,44 @@ export default function HomePage() {
       setBalance(account.data.coins);
     } catch (err) {
       console.error("wallet connection failed", err);
+    }
+  };
+
+  const onSend = async () => {
+    if (!window.adena || !isReady) return;
+
+    try {
+      const tx = await window.adena.DoContract({
+        tx: {
+          messages: [
+            {
+              type: "/bank.MsgSend",
+              value: {
+                from_address: address,
+                to_address: recipient,
+                amount: amount,
+              },
+            },
+          ],
+          memo: "Send GNOT for assignment",
+        },
+        isNotification: true,
+      });
+
+      addToast({
+        id: crypto.randomUUID(),
+        status:
+          tx.status === "success"
+            ? "Transaction Success"
+            : "Transaction Failed",
+        txHash: tx.data?.hash ?? "",
+      });
+    } catch {
+      addToast({
+        id: crypto.randomUUID(),
+        status: "Transaction Failed",
+        txHash: "",
+      });
     }
   };
 
@@ -101,9 +160,19 @@ export default function HomePage() {
           <p>Balance: {isBalanceVisible ? balanceUgnot || "0ugnot" : ""}</p>
         </Card>
         <Card title="Send GNOT">
-          <Input label="Recipient:" placeholder="g1..." />
-          <Input label="Amount:" placeholder="1000000ugnot" />
-          <Button enabled={isReady} label="Send" />
+          <Input
+            label="Recipient:"
+            placeholder="g1..."
+            value={recipient}
+            onChange={setRecipient}
+          />
+          <Input
+            label="Amount:"
+            placeholder="1000000ugnot"
+            value={amount}
+            onChange={setAmount}
+          />
+          <Button enabled={isReady} onClick={onSend} label="Send" />
         </Card>
       </div>
     </main>
