@@ -1,4 +1,5 @@
-// component
+// components
+import Button from "../components/Button";
 import Card from "../components/Card";
 
 // store
@@ -62,30 +63,14 @@ export default function HomePage() {
 
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         <Card title="Connect Adena Wallet">
-          <button
-            className={`h-11 w-full rounded-md text-[16px] text-white ${isReady ? "bg-[#808080]" : "bg-[#2c4be2]"}`}
-            onClick={connectWallet}
-            disabled={isReady}
-          >
-            Connect
-          </button>
+          <Button enabled={!isReady} onClick={connectWallet} label="Connect" />
         </Card>
         <Card title="Get Gno.land Address">
-          <button
-            className={`h-11 w-full rounded-md text-[16px] text-white ${isReady ? "bg-[#2c4be2]" : "bg-[#808080]"}`}
-            disabled={!isReady}
-          >
-            Get Address
-          </button>
+          <Button enabled={isReady} label="Get Address" />
           <p>Address:</p>
         </Card>
         <Card title="Get Balance">
-          <button
-            className={`h-11 w-full rounded-md text-[16px] text-white ${isReady ? "bg-[#2c4be2]" : "bg-[#808080]"}`}
-            disabled={!isReady}
-          >
-            Get Balance
-          </button>
+          <Button enabled={isReady} label="Get Balance" />
           <p>Balance:</p>
         </Card>
         <Card title="Send GNOT">
@@ -97,12 +82,7 @@ export default function HomePage() {
             <span className="mb-1 block">Amount:</span>
             <input className="h-10 w-full rounded-md border border-gray-400 px-3 text-[12px]" />
           </label>
-          <button
-            className={`h-11 w-full rounded-md text-[16px] text-white ${isReady ? "bg-[#2c4be2]" : "bg-[#808080]"}`}
-            disabled={!isReady}
-          >
-            Send
-          </button>
+          <Button enabled={isReady} label="Send" />
         </Card>
       </div>
     </main>
