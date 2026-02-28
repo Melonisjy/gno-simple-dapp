@@ -4,6 +4,7 @@ import Card from "../components/Card";
 // store
 import { useWalletStore } from "../store/walletStore";
 
+const PORTAL_LOOP_CHAIN_ID = "portal-loop";
 type AdenaProvider = {
   AddEstablish: (appName: string) => Promise<unknown>;
   SwitchNetwork: (chainId: string) => Promise<unknown>;
@@ -25,8 +26,6 @@ declare global {
 }
 
 export default function HomePage() {
-  const PORTAL_LOOP_CHAIN_ID = "portal-loop";
-
   const { isConnected, chainId, setAccount } = useWalletStore();
   const isReady = isConnected && chainId === PORTAL_LOOP_CHAIN_ID;
 
@@ -40,21 +39,16 @@ export default function HomePage() {
       await window.adena.AddEstablish("Adena");
 
       let account = await window.adena.GetAccount();
-      let address = account.data.address ?? "";
-      let currentChainId = account.data.chainId ?? "";
+      if (!account.data.address) throw new Error("No address");
 
-      if (!address) throw new Error("No address");
-
-      if (currentChainId !== PORTAL_LOOP_CHAIN_ID) {
-        const res = await window.adena.SwitchNetwork(PORTAL_LOOP_CHAIN_ID);
-        console.log(res);
+      if (account.data.chainId !== PORTAL_LOOP_CHAIN_ID) {
+        await window.adena.SwitchNetwork(PORTAL_LOOP_CHAIN_ID);
         account = await window.adena.GetAccount();
-        address = account.data.address ?? "";
-        currentChainId = account.data.chainId ?? "";
       }
-
-      setAccount({ address, chainId: currentChainId });
-      console.log(account);
+      setAccount({
+        address: account.data.address,
+        chainId: account.data.chainId,
+      });
     } catch (err) {
       console.error("wallet connection failed", err);
     }
