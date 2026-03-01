@@ -1,18 +1,8 @@
+// zustand
 import { create } from "zustand";
 
-type AccountPayLoad = {
-  address: string;
-  chainId: string;
-};
-
-type WalletState = {
-  isConnected: boolean;
-  address: string;
-  balanceUgnot: string;
-  chainId: string;
-  setAccount: (payload: AccountPayLoad) => void;
-  setBalance: (balanceUgnot: string) => void;
-};
+// types
+import type { WalletState } from "../types/wallet";
 
 export const useWalletStore = create<WalletState>((set) => ({
   isConnected: false,

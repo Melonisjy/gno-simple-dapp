@@ -1,18 +1,8 @@
+// zustand
 import { create } from "zustand";
 
-export type ToastStatus = "Transaction Success" | "Transaction Failed";
-
-export type ToastItem = {
-  id: string;
-  status: ToastStatus;
-  txHash: string;
-};
-
-type ToastState = {
-  toasts: ToastItem[];
-  addToast: (toast: ToastItem) => void;
-  removeToast: (id: string) => void;
-};
+// types
+import type { ToastState } from "../types/toast";
 
 export const useToastStore = create<ToastState>((set) => ({
   toasts: [],
