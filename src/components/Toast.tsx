@@ -16,7 +16,7 @@ export default function Toast() {
   }, [toasts, removeToast]);
 
   return (
-    <div className="fixed top-4 right-4 z-50 flex w-[360px] flex-col gap-2">
+    <div className="fixed top-4 right-4 z-50 flex max-w-[95vw] flex-col gap-2">
       {toasts.map((toast) => {
         const isTxSuccess = toast.status === "Transaction Success";
 
