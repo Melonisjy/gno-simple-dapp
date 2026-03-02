@@ -39,21 +39,35 @@ export default function HomePage() {
 
     try {
       await window.adena.AddEstablish("Adena");
+
       let account = await window.adena.GetAccount();
+
       if (!account.data.address) throw new Error("No address");
 
       if (account.data.chainId !== STAGING_CHAIN_ID) {
         await window.adena.SwitchNetwork(STAGING_CHAIN_ID);
-
         account = await window.adena.GetAccount();
       }
       setAccount({
         address: account.data.address,
         chainId: account.data.chainId,
       });
-      setBalance(account.data.coins);
     } catch (err) {
       console.error("wallet connection failed", err);
+    }
+  };
+
+  const onGetBalance = async () => {
+    if (!window.adena || !isReady) return;
+
+    try {
+      const account = await window.adena.GetAccount();
+      setBalance(account.data.coins ?? "");
+      setIsBalanceVisible(true);
+    } catch (err) {
+      console.error("get balance failed", err);
+      setBalance("");
+      setIsBalanceVisible(true);
     }
   };
 
@@ -113,7 +127,7 @@ export default function HomePage() {
         <Card title="Get Balance">
           <Button
             enabled={isReady}
-            onClick={() => setIsBalanceVisible(true)}
+            onClick={onGetBalance}
             label="Get Balance"
           />
           <p>Balance: {isBalanceVisible ? balanceUgnot || "0ugnot" : ""}</p>
