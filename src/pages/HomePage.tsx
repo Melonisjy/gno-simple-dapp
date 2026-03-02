@@ -100,7 +100,7 @@ export default function HomePage() {
 
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         <Card title="Connect Adena Wallet">
-          <Button enabled={!isReady} onClick={onConnect} label="Connect" />
+          <Button enabled={!isConnected} onClick={onConnect} label="Connect" />
         </Card>
         <Card title="Get Gno.land Address">
           <Button
