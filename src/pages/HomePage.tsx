@@ -15,6 +15,8 @@ import type { AdenaError } from "../types/wallet";
 
 // constant
 const STAGING_CHAIN_ID = "staging";
+const TX_SUCCESS = "Transaction Success" as const;
+const TX_FAILED = "Transaction Failed" as const;
 
 export default function HomePage() {
   const { addToast } = useToastStore();
@@ -76,6 +78,10 @@ export default function HomePage() {
     }
   };
 
+  const onGetAddress = () => {
+    setIsAddressVisible(true);
+  };
+
   const onGetBalance = async () => {
     if (!window.adena || !isReady) return;
 
@@ -114,13 +120,13 @@ export default function HomePage() {
 
       addToast({
         id: crypto.randomUUID(),
-        status: "Transaction Success",
+        status: TX_SUCCESS,
         txHash: tx.data?.hash ?? "-",
       });
     } catch (err) {
       addToast({
         id: crypto.randomUUID(),
-        status: "Transaction Failed",
+        status: TX_FAILED,
         txHash: "-",
         errorMessage: getErrorMessage(err),
       });
@@ -140,7 +146,7 @@ export default function HomePage() {
         <Card title="Get Gno.land Address">
           <Button
             enabled={isReady}
-            onClick={() => setIsAddressVisible(true)}
+            onClick={onGetAddress}
             label="Get Address"
           />
           <p>Address: {isAddressVisible ? address : ""}</p>
