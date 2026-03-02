@@ -6,47 +6,12 @@ import Button from "../components/Button";
 import Card from "../components/Card";
 import Input from "../components/Input";
 
-// store
+// stores
 import { useWalletStore } from "../store/walletStore";
 import { useToastStore } from "../store/toastStore";
 
+// constant
 const STAGING_CHAIN_ID = "staging";
-
-type AccountData = {
-  address: string;
-  coins: string;
-  chainId: string;
-};
-
-type AdenaProvider = {
-  AddEstablish: (appName: string) => Promise<unknown>;
-  SwitchNetwork: (chainId: string) => Promise<unknown>;
-  GetAccount: () => Promise<{
-    code: number;
-    status: string;
-    data: AccountData;
-  }>;
-  DoContract: (payload: {
-    messages: Array<{
-      type: string;
-      value: {
-        from_address: string;
-        to_address: string;
-        amount: string;
-      };
-    }>;
-    memo?: string;
-  }) => Promise<{
-    status?: "success" | "failure";
-    data?: { hash?: string };
-  }>;
-};
-
-declare global {
-  interface Window {
-    adena?: AdenaProvider;
-  }
-}
 
 export default function HomePage() {
   const { addToast } = useToastStore();
