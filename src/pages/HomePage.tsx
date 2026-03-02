@@ -26,10 +26,10 @@ export default function HomePage() {
 
   const isReady = isConnected && chainId === STAGING_CHAIN_ID;
 
-  const [isAddressVisible, setIsAddressVisible] = useState<boolean>(false);
-  const [isBalanceVisible, setIsBalanceVisible] = useState<boolean>(false);
-  const [recipient, setRecipient] = useState<string>("");
-  const [amount, setAmount] = useState<string>("");
+  const [isAddressVisible, setIsAddressVisible] = useState(false);
+  const [isBalanceVisible, setIsBalanceVisible] = useState(false);
+  const [recipient, setRecipient] = useState("");
+  const [amount, setAmount] = useState("");
 
   const onConnect = async () => {
     if (!window.adena) {
