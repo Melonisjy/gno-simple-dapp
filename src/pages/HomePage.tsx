@@ -10,6 +10,9 @@ import Input from "../components/Input";
 import { useWalletStore } from "../store/walletStore";
 import { useToastStore } from "../store/toastStore";
 
+// type
+import type { AdenaError } from "../types/wallet";
+
 // constant
 const STAGING_CHAIN_ID = "staging";
 
@@ -30,6 +33,22 @@ export default function HomePage() {
   const [isBalanceVisible, setIsBalanceVisible] = useState(false);
   const [recipient, setRecipient] = useState("");
   const [amount, setAmount] = useState("");
+
+  const getErrorMessage = (error: unknown) => {
+    const e = error as AdenaError;
+
+    if (e?.code === 1002 || e?.type === "INVALID_FORMAT")
+      return e?.message ?? "Invalid format";
+    if (e?.code === 2000 || e?.type === "WALLET_LOCKED")
+      return e?.message ?? "Adena is locked";
+    if (e?.code === 1001 || e?.type === "UNRESOLVED_TRANSACTION_EXISTS")
+      return e?.message ?? "Resolve previous Adena popup";
+    if (e?.code === 4000 || e?.type?.endsWith("_REJECTED"))
+      return e?.message ?? "User rejected";
+    if (e?.code === 4001 || e?.type === "TRANSACTION_FAILED")
+      return e?.message ?? "Transaction failed";
+    return e?.message ?? "Unknown Adena error";
+  };
 
   const onConnect = async () => {
     if (!window.adena) {
@@ -89,19 +108,21 @@ export default function HomePage() {
         memo: "Send GNOT for assignment",
       });
 
+      if (tx.status !== "success") {
+        throw tx;
+      }
+
       addToast({
         id: crypto.randomUUID(),
-        status:
-          tx.status === "success"
-            ? "Transaction Success"
-            : "Transaction Failed",
+        status: "Transaction Success",
         txHash: tx.data?.hash ?? "-",
       });
-    } catch {
+    } catch (err) {
       addToast({
         id: crypto.randomUUID(),
         status: "Transaction Failed",
         txHash: "-",
+        errorMessage: getErrorMessage(err),
       });
     }
   };
