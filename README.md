@@ -1,6 +1,8 @@
 # Gno.land Simple Dapp (Adena Wallet)
 
-## Tech Stacks
+---
+
+# 기술 스택
 
 - React (required)
 - Typescript (required)
@@ -8,7 +10,7 @@
 - Zustand
 - Tailwind CSS
 
-## Why these stacks?
+## 기술 선택 이유
 
 ### Tailwind CSS (vs styled-components)
 
@@ -25,3 +27,15 @@
 1. React 생태계에서 CRA보다 선호도가 높음
 2. ESBuild 기반으로 dev server/HMR이 빨라 개발 생산성이 높음
 3. CRA 대비 불필요한 추상화가 적어 구조 파악이 쉬움
+
+---
+
+# 프로젝트 구조
+
+- `src/`
+  - `components/` : UI 컴포넌트 (`Card`, `Button`, `Input`, `Toast`)
+  - `pages/` : 페이지 단위 컴포넌트 (`HomePage`)
+  - `store/` : Zustand 전역 상태 (`wallet`, `toast`)
+  - `types/` : 공통 타입 정의
+  - `App.tsx`
+  - `main.tsx`
