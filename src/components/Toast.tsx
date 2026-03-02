@@ -29,7 +29,7 @@ export default function Toast() {
             >
               {isTxSuccess ? "Transaction Success" : "Transaction Failed"}
             </p>
-            <p className="text-[16px]">txHash: {toast.txHash || ""}</p>
+            <p className="text-[16px]">txHash: {toast.txHash || "-"}</p>
           </div>
         );
       })}
