@@ -41,3 +41,11 @@ export type WalletState = {
   setAccount: (payload: AccountPayload) => void;
   setBalance: (balanceUgnot: string) => void;
 };
+
+export type AdenaError = {
+  code?: number;
+  type?: string;
+  status?: "success" | "failure";
+  message?: string;
+  data?: { hash?: string };
+};
