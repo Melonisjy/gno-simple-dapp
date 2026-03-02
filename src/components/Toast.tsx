@@ -29,7 +29,10 @@ export default function Toast() {
             >
               {isTxSuccess ? "Transaction Success" : "Transaction Failed"}
             </p>
-            <p className="text-[16px]">txHash: {toast.txHash || "-"}</p>
+            {toast.errorMessage && (
+              <p className="text-sm text-red-400">{toast.errorMessage}</p>
+            )}
+            <p className="mt-1 text-[16px]">txHash: {toast.txHash || "-"}</p>
           </div>
         );
       })}
