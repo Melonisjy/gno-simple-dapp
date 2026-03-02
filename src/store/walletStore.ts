@@ -1,7 +1,7 @@
 // zustand
 import { create } from "zustand";
 
-// types
+// type
 import type { WalletState } from "../types/wallet";
 
 export const useWalletStore = create<WalletState>((set) => ({

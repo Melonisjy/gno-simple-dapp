@@ -1,7 +1,7 @@
 // zustand
 import { create } from "zustand";
 
-// types
+// type
 import type { ToastState } from "../types/toast";
 
 export const useToastStore = create<ToastState>((set) => ({
